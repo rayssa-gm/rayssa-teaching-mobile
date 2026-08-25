@@ -7,20 +7,25 @@ import { TODO } from "../lib/todo";
 
 // TODO F05-A01
 export function criarTecnologias(): Set<string> {
-  return TODO<Set<string>>("F05-A01");
+  const tecnologias = new Set<string>();
+  tecnologias.add("JavaScript");
+  tecnologias.add("TypeScript");
+  tecnologias.add("React");
+  return tecnologias;
 }
 
 // TODO F05-A02
 export function adicionarTecnologia(tecnologias: Set<string>, valor: string): Set<string> {
-  return TODO<Set<string>>("F05-A02");
+  tecnologias.add(valor);
+  return tecnologias;
 }
 
 // TODO F05-A03
 export function quantidadeUnica(tecnologias: Set<string>): number {
-  return TODO<number>("F05-A03");
+  return tecnologias.size;
 }
 
 // TODO F05-A04
 export function semDuplicatas(valores: string[]): Set<string> {
-  return TODO<Set<string>>("F05-A04");
+  return new Set<string>(valores);
 }

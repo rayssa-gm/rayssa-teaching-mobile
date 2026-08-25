@@ -13,12 +13,16 @@ export type Aluno = {
 
 // TODO F07-A01
 export function criarAluno(nome: string, idade: number, entregouAtividade: boolean): Aluno {
-  return TODO<Aluno>("F07-A01");
+  return {
+    nome: nome,
+    idade: idade,
+    entregouAtividade: entregouAtividade,
+  };
 }
 
 // TODO F07-A02
 export function nomeDoAluno(aluno: Aluno): string {
-  return TODO<string>("F07-A02");
+  return aluno.nome;
 }
 
 // TODO F07-A03
@@ -28,7 +32,10 @@ export function criarRegistroNotas(
   nome2: string,
   nota2: number,
 ): Record<string, number> {
-  return TODO<Record<string, number>>("F07-A03");
+  const registro: Record<string, number> = {};
+  registro[nome1] = nota1;
+  registro[nome2] = nota2;
+  return registro;
 }
 
 // TODO F07-A04
@@ -36,5 +43,5 @@ export function consultarRegistro(
   registro: Record<string, number>,
   nome: string,
 ): number | undefined {
-  return TODO<number | undefined>("F07-A04");
+  return registro[nome];
 }

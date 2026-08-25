@@ -26,7 +26,12 @@ export type PainelAluno = {
 
 // TODO F08-A01
 export function criarAppDaTurma(): AppDaTurma {
-  return TODO<AppDaTurma>("F08-A01");
+  return {
+    alunos: [],
+    notasBimestrais: [],
+    tecnologias: new Set<string>(),
+    notasPorAluno: new Map<string, number>(),
+  };
 }
 
 // TODO F08-A02
@@ -35,17 +40,21 @@ export function adicionarAluno(
   aluno: AlunoApp,
   notas: number[],
 ): AppDaTurma {
-  return TODO<AppDaTurma>("F08-A02");
+  app.alunos.push(aluno);
+  app.notasBimestrais.push(notas);
+  return app;
 }
 
 // TODO F08-A03
 export function registrarTecnologia(app: AppDaTurma, tecnologia: string): AppDaTurma {
-  return TODO<AppDaTurma>("F08-A03");
+  app.tecnologias.add(tecnologia);
+  return app;
 }
 
 // TODO F08-A04
 export function registrarMedia(app: AppDaTurma, nome: string, media: number): AppDaTurma {
-  return TODO<AppDaTurma>("F08-A04");
+  app.notasPorAluno.set(nome, media);
+  return app;
 }
 
 // TODO F08-A05
@@ -54,5 +63,8 @@ export function consultarPainel(
   indiceAluno: number,
   bimestre: number,
 ): PainelAluno {
-  return TODO<PainelAluno>("F08-A05");
+  const aluno = app.alunos[indiceAluno];
+  const nota = app.notasBimestrais[indiceAluno][bimestre];
+  const media = app.notasPorAluno.get(aluno.nome);
+  return { aluno, nota, media};
 }

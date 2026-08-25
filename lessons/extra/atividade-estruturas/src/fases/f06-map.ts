@@ -7,7 +7,11 @@ import { TODO } from "../lib/todo";
 
 // TODO F06-A01
 export function criarNotasPorAluno(): Map<string, number> {
-  return TODO<Map<string, number>>("F06-A01");
+  const notas = new Map<string, number>();
+  notas.set("Ana", 8.5);
+  notas.set("Bruno", 7.0);
+  notas.set("Carla", 9.0);
+  return notas;
 }
 
 // TODO F06-A02
@@ -16,12 +20,13 @@ export function registrarNota(
   nome: string,
   nota: number,
 ): Map<string, number> {
-  return TODO<Map<string, number>>("F06-A02");
+  notas.set(nome, nota);
+  return notas;
 }
 
 // TODO F06-A03
 export function consultarNota(notas: Map<string, number>, nome: string): number | undefined {
-  return TODO<number | undefined>("F06-A03");
+  return notas.get(nome);
 }
 
 // TODO F06-A04
@@ -30,7 +35,8 @@ export function atualizarNota(
   nome: string,
   novaNota: number,
 ): Map<string, number> {
-  return TODO<Map<string, number>>("F06-A04");
+  notas.set(nome, novaNota);
+  return notas;
 }
 
 // TODO F06-A05
@@ -42,5 +48,9 @@ export function mapearTresNotas(
   nome3: string,
   nota3: number,
 ): Map<string, number> {
-  return TODO<Map<string, number>>("F06-A05");
+  const notas = new Map<string, number>();
+  notas.set(nome1, nota1);
+  notas.set(nome2, nota2);
+  notas.set(nome3, nota3);
+  return notas;
 }
