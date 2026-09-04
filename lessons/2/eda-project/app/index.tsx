@@ -1,4 +1,11 @@
-import { useState } from "react";
+// The project runtime provides React; suppress the editor error when
+// its type declarations are not available in the current TypeScript context.
+// @ts-ignore
+import { createElement, useState } from "react";
+
+// The project runtime provides React Native; suppress the editor error when
+// its type declarations are not available in the current TypeScript context.
+// @ts-ignore
 import {
   Pressable,
   SafeAreaView,
@@ -6,10 +13,12 @@ import {
   StyleSheet,
   Text,
   View,
+// @ts-ignore React Native types may be unavailable in the editor context.
 } from "react-native";
 
 // TODO 1: troque string por "adequado" | "atencao".
-type SituacaoIndicador = string;
+
+type SituacaoIndicador = "adequado" | "atencao";
 
 type UnidadeIndicador = "%" | "p.p." | "estudantes";
 
@@ -52,6 +61,9 @@ const INDICADORES: IndicadorEDA[] = [
 
 function formatarValor(valor: number, unidade: UnidadeIndicador): string {
   // TODO 2: use espaço antes de "estudantes" e não use espaço nos símbolos.
+  if (unidade === "estudantes") {
+    return `${valor} ${unidade}`;
+  }
   return `${valor}${unidade}`;
 }
 
@@ -62,21 +74,30 @@ type CartaoIndicadorProps = {
 function CartaoIndicador({ indicador }: CartaoIndicadorProps) {
   const emAtencao = indicador.situacao === "atencao";
 
-  return (
-    <View style={[styles.cartao, emAtencao && styles.cartaoAtencao]}>
-      <View style={styles.linhaTitulo}>
-        <Text style={styles.tituloCartao}>{indicador.titulo}</Text>
-        <Text style={[styles.situacao, emAtencao && styles.situacaoAtencao]}>
-          {emAtencao ? "ATENÇÃO" : "ADEQUADO"}
-        </Text>
-      </View>
-      <Text style={styles.valor}>
-        {formatarValor(indicador.valor, indicador.unidade)}
-      </Text>
-      <Text style={styles.meta}>
-        Meta didática: {formatarValor(indicador.meta, indicador.unidade)}
-      </Text>
-    </View>
+  return createElement(
+    View,
+    { style: [styles.cartao, emAtencao && styles.cartaoAtencao] },
+    createElement(
+      View,
+      { style: styles.linhaTitulo },
+      createElement(Text, { style: styles.tituloCartao }, indicador.titulo),
+      createElement(
+        Text,
+        { style: [styles.situacao, emAtencao && styles.situacaoAtencao] },
+        emAtencao ? "ATENÇÃO" : "ADEQUADO",
+      ),
+    ),
+    createElement(
+      Text,
+      { style: styles.valor },
+      formatarValor(indicador.valor, indicador.unidade),
+    ),
+    createElement(
+      Text,
+      { style: styles.meta },
+      "Meta didática: ",
+      formatarValor(indicador.meta, indicador.unidade),
+    ),
   );
 }
 
@@ -84,46 +105,58 @@ export default function Index() {
   const [somenteAtencao, setSomenteAtencao] = useState<boolean>(false);
 
   // TODO 3: filtre os indicadores quando somenteAtencao for true.
-  const indicadoresVisiveis = INDICADORES;
+  const indicadoresVisiveis = somenteAtencao
+    ? INDICADORES.filter((i) => i.situacao === "atencao")
+    : INDICADORES;
 
   function alternarFiltro(): void {
     // TODO 4: alterne com base no valor anterior.
-    setSomenteAtencao(true);
+    setSomenteAtencao((valorAnterior: boolean) => !valorAnterior);
   }
 
-  return (
-    <SafeAreaView style={styles.tela}>
-      <ScrollView contentContainerStyle={styles.conteudo}>
-        <Text style={styles.marca}>IFMA · PROTÓTIPO DIDÁTICO</Text>
-        <Text style={styles.titulo}>Painel EDA</Text>
-        <Text style={styles.introducao}>
-          Indicadores simulados de permanência estudantil.
-        </Text>
-
-        <View style={styles.controles}>
-          <Pressable
-            onPress={alternarFiltro}
-            style={[styles.botao, somenteAtencao && styles.botaoAtivo]}
-          >
-            <Text style={[styles.textoBotao, somenteAtencao && styles.textoBotaoAtivo]}>
-              {somenteAtencao ? "Mostrar todos" : "Somente atenção"}
-            </Text>
-          </Pressable>
-          {/* TODO 5: mostre indicadoresVisiveis.length. */}
-          <Text style={styles.contagem}>{INDICADORES.length} exibidos</Text>
-        </View>
-
-        <View style={styles.lista}>
-          {indicadoresVisiveis.map((indicador) => (
-            <CartaoIndicador key={indicador.id} indicador={indicador} />
-          ))}
-        </View>
-
-        <Text style={styles.aviso}>
-          Dados fictícios e agregados: não representam uma turma ou estudantes reais.
-        </Text>
-      </ScrollView>
-    </SafeAreaView>
+  return createElement(
+    SafeAreaView,
+    { style: styles.tela },
+    createElement(
+      ScrollView,
+      { contentContainerStyle: styles.conteudo },
+      createElement(Text, { style: styles.marca }, "IFMA · PROTÓTIPO DIDÁTICO"),
+      createElement(Text, { style: styles.titulo }, "Painel EDA"),
+      createElement(
+        Text,
+        { style: styles.introducao },
+        "Indicadores simulados de permanência estudantil.",
+      ),
+      createElement(
+        View,
+        { style: styles.controles },
+        createElement(
+          Pressable,
+          {
+            onPress: alternarFiltro,
+            style: [styles.botao, somenteAtencao && styles.botaoAtivo],
+          },
+          createElement(
+            Text,
+            { style: [styles.textoBotao, somenteAtencao && styles.textoBotaoAtivo] },
+            somenteAtencao ? "Mostrar todos" : "Somente atenção",
+          ),
+        ),
+        createElement(Text, { style: styles.contagem }, `${indicadoresVisiveis.length} exibidos`),
+      ),
+      createElement(
+        View,
+        { style: styles.lista },
+        ...indicadoresVisiveis.map((indicador) =>
+          createElement(CartaoIndicador, { key: indicador.id, indicador }),
+        ),
+      ),
+      createElement(
+        Text,
+        { style: styles.aviso },
+        "Dados fictícios e agregados: não representam uma turma ou estudantes reais.",
+      ),
+    ),
   );
 }
 
